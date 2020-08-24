@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "389567317464",
+    "firebase_url": "https://chatmap-bf983.firebaseio.com",
+    "project_id": "chatmap-bf983",
+    "storage_bucket": "chatmap-bf983.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:389567317464:android:d399c1ac2b8e61dd285ead",
+        "android_client_info": {
+          "package_name": "com.chatmap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "389567317464-rurkk0t72uc6v21h70ooprkglh9tvsmn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chatmap",
+            "certificate_hash": "e7854fcf6f770e681d945c802d5360740a878714"
+          }
+        },
+        {
+          "client_id": "389567317464-6ltc7m4j4ndq4u3ojebs36lc0u0132r6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chatmap",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "389567317464-qbqiqpf49nt15un1sv1uq9ftctbr2jjs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7E4PTPKkXIPMjIp_7aCAPPHqwATXkkP0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "389567317464-qbqiqpf49nt15un1sv1uq9ftctbr2jjs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
