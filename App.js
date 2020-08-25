@@ -177,60 +177,11 @@
 //     );
 //
 // }
-import 'react-native-gesture-handler';
-import React, {useState, useEffect} from 'react';
-
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
-
-import auth from '@react-native-firebase/auth';
-
-import {SafeAreaView, StatusBar, View} from 'react-native';
-
-import Login from './App/Components/Login';
-import Home from './App/Components/Home';
-import Register from './App/Components/Register';
-
+import Router from './App/router'
+import React from "react"
 
 export default () => {
-    // Set an initializing state whilst Firebase connects
-    const [initializing, setInitializing] = useState(true);
-    const [user, setUser] = useState();
-
-    // Handle user state changes
-    function onAuthStateChanged(user) {
-        setUser(user);
-        if (initializing) {
-            setInitializing(false);
-        }
-    }
-
-    useEffect(() => {
-        const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-        return subscriber; // unsubscribe on unmount
-    }, []);
-
-    if (initializing) {
-        return null;
-    }
-
-    const Stack = createStackNavigator();
-
-
     return (
-        <NavigationContainer>
-            {user
-                ? (
-                    <Stack.Navigator initialRouteName="Home">
-                        <Stack.Screen name="Home" component={Home}/>
-                    </Stack.Navigator>)
-                : (
-                    <Stack.Navigator initialRouteName="Register">
-                        <Stack.Screen name="Register" component={Register}/>
-                        <Stack.Screen name="Login" component={Login}/>
-                    </Stack.Navigator>
-                )}
-
-        </NavigationContainer>
+        <Router />
     );
 }

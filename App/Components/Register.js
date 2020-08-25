@@ -1,28 +1,9 @@
 import React, {Component} from 'react';
-import {StyleSheet, TextInput, View, Text, Button} from 'react-native';
+import {StyleSheet, TextInput, View, Text, Button, Image, TouchableHighlight} from 'react-native';
 
 import auth from '@react-native-firebase/auth';
 
-const InitWindowStyles = StyleSheet.create({
-    root: {
-        flex: 1,
-        flexDirection: 'column',
-    },
-    rowContainer: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    text: {
-        flex: 1,
-    },
-    textInput: {
-        flex: 1,
-        backgroundColor: 'white',
-        borderColor: 'black',
-    },
-});
+import formStyle from './formStyle'
 
 const register = (email, password) => {
     console.log(email,password)
@@ -42,38 +23,34 @@ export default (props) => {
     const [password, onChangePassword] = React.useState('');
 
     return (
-        <>
-            <Text>Register</Text>
-            <View style={InitWindowStyles.root}>
-                <View style={InitWindowStyles.rowContainer}>
-                    <Text style={InitWindowStyles.text}>Email</Text>
-                    <TextInput
-                        autoCorrect={false}
-                        onChangeText={text => onChangeEmail(text)}
-                        value={email}
-                        style={InitWindowStyles.textInput}
-                    />
-                </View>
-                <View style={InitWindowStyles.rowContainer}>
-                    <Text style={InitWindowStyles.text}>Password</Text>
-                    <TextInput
-                        autoCorrect={false}
-                        onChangeText={text => onChangePassword(text)}
-                        value={password}
-                        style={InitWindowStyles.textInput}
-                        secureTextEntry={true}
-                    />
-                </View>
-                <Button
-                    title="Register"
-                    color="#f194ff"
-                    onPress={register.bind(this, email, password)}
+        <View style={formStyle.container}>
+            <View style={formStyle.inputContainer}>
+                <Image style={formStyle.inputIcon} source={{uri: 'https://png.icons8.com/message/ultraviolet/50/3498db'}}/>
+                <TextInput style={formStyle.inputs}
+                           placeholder="Email"
+                           keyboardType="email-address"
+                           underlineColorAndroid='transparent'
+                           onChangeText={text => onChangeEmail(text)}
+                           value={email}
                 />
-                <Text>
-                    Already registered ?
-                    <Text onPress={() => navigation.navigate('Login')}>Login</Text>
-                </Text>
             </View>
-        </>
+            <View style={formStyle.inputContainer}>
+                <Image style={formStyle.inputIcon} source={{uri: 'https://png.icons8.com/key-2/ultraviolet/50/3498db'}}/>
+                <TextInput style={formStyle.inputs}
+                           placeholder="Password"
+                           secureTextEntry={true}
+                           underlineColorAndroid='transparent'
+                           onChangeText={text => onChangePassword(text)}
+                           value={password}
+                />
+            </View>
+            <TouchableHighlight style={[formStyle.buttonContainer, formStyle.loginButton]} onPress={register.bind(this, email, password)}>
+                <Text style={formStyle.loginText}>Sign up</Text>
+            </TouchableHighlight>
+            <Text>
+                Already a account ?
+                <Text onPress={() => navigation.navigate('Login')}>Sign in</Text>
+            </Text>
+        </View>
     );
 };
