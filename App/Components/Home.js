@@ -1,39 +1,39 @@
-import React, {Component} from 'react';
-import { Text, StyleSheet, View } from "react-native";
-
-import auth from '@react-native-firebase/auth';
-// import {GoogleApiWrapper, Map} from "google-maps-react"
-
-const disconnectUser = () => {
-    auth().signOut().then(function() {
-        // Sign-out successful.
-    }).catch(function(error) {
-        // An error happened.
-    });
-}
-
-const mapStyles = {
-    width: '100%',
-    height: '100%',
-};
-
-const Home = () => {
-    return (
-        <View>
-            <Text>Home</Text>
-            <Text onPress={disconnectUser}>Disconnect</Text>
-            {/*<Map*/}
-            {/*    google={this.props.google}*/}
-            {/*    zoom={8}*/}
-            {/*    style={mapStyles}*/}
-            {/*    initialCenter={{ lat: 47.444, lng: -122.176}}*/}
-            {/*/>*/}
-
-        </View>
-    )
-}
-
-export default Home
+// import React, {Component} from 'react';
+// import { Text, StyleSheet, View } from "react-native";
+//
+// import auth from '@react-native-firebase/auth';
+// // import {GoogleApiWrapper, Map} from "google-maps-react"
+//
+// const disconnectUser = () => {
+//     auth().signOut().then(function() {
+//         // Sign-out successful.
+//     }).catch(function(error) {
+//         // An error happened.
+//     });
+// }
+//
+// const mapStyles = {
+//     width: '100%',
+//     height: '100%',
+// };
+//
+// const Home = () => {
+//     return (
+//         <View>
+//             <Text>Home</Text>
+//             <Text onPress={disconnectUser}>Disconnect</Text>
+//             {/*<Map*/}
+//             {/*    google={this.props.google}*/}
+//             {/*    zoom={8}*/}
+//             {/*    style={mapStyles}*/}
+//             {/*    initialCenter={{ lat: 47.444, lng: -122.176}}*/}
+//             {/*/>*/}
+//
+//         </View>
+//     )
+// }
+//
+// export default Home
 
 
 // export class Home extends Component {
@@ -100,3 +100,36 @@ export default Home
 // export default GoogleApiWrapper({
 //     apiKey: ('AIzaSyCeYlJR5yOfwfNoIAEAxkGYqKoX_c4wLc8')
 // })(MapContainer)
+
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import React from "react"
+import { StyleSheet, View } from "react-native";// remove PROVIDER_GOOGLE import if not using Google Maps
+
+const styles = StyleSheet.create({
+    container: {
+        ...StyleSheet.absoluteFillObject,
+        height: 400,
+        width: 400,
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+    },
+    map: {
+        ...StyleSheet.absoluteFillObject,
+    },
+});
+
+export default () => (
+    <View style={styles.container}>
+        <MapView
+            provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+            style={styles.map}
+            region={{
+                latitude: 37.78825,
+                longitude: -122.4324,
+                latitudeDelta: 0.015,
+                longitudeDelta: 0.0121,
+            }}
+        >
+        </MapView>
+    </View>
+);
