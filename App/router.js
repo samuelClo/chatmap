@@ -1,11 +1,14 @@
+import {useEffect, useState} from "react"
+import React from "react"
+
 import auth from "@react-native-firebase/auth"
 import {createStackNavigator} from "@react-navigation/stack"
 import {NavigationContainer} from "@react-navigation/native"
+
 import Home from "./Components/Home"
 import Register from "./Components/Register"
 import Login from "./Components/Login"
-import {useEffect, useState} from "react"
-import React from "react"
+import SearchPlace from "./Components/SearchPlace"
 
 export default () => {
     // Set an initializing state whilst Firebase connects
@@ -37,7 +40,8 @@ export default () => {
             {user
                 ? (
                     <Stack.Navigator initialRouteName="Home">
-                        <Stack.Screen name="Home" component={Home}/>
+                        <Stack.Screen name="Home" component={Home} initialParams={{ dataLocalization: {} }}/>
+                        <Stack.Screen name="SearchPlace" component={SearchPlace}/>
                     </Stack.Navigator>)
                 : (
                     <Stack.Navigator initialRouteName="Register">

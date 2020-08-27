@@ -25,7 +25,6 @@ export default (props) => {
     return (
         <View style={formStyle.container}>
             <View style={formStyle.inputContainer}>
-                <Image style={formStyle.inputIcon} source={{uri: 'https://png.icons8.com/message/ultraviolet/50/3498db'}}/>
                 <TextInput style={formStyle.inputs}
                            placeholder="Email"
                            keyboardType="email-address"
@@ -35,7 +34,6 @@ export default (props) => {
                 />
             </View>
             <View style={formStyle.inputContainer}>
-                <Image style={formStyle.inputIcon} source={{uri: 'https://png.icons8.com/key-2/ultraviolet/50/3498db'}}/>
                 <TextInput style={formStyle.inputs}
                            placeholder="Password"
                            secureTextEntry={true}
