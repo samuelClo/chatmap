@@ -956,6 +956,11 @@
   resolved "https://registry.yarnpkg.com/@react-native-firebase/auth/-/auth-9.0.0.tgz#b7b211ba6555365a83355b92df825f857908c653"
   integrity sha512-2W0abJCOsXJNfCgaKmXPcpPQgV/MZKC5KVQOufGMYAOMytc8EFIqGhv7S9b9tqR0dYYkZUryPX6w+IvI9G4aIQ==
 
+"@react-native-firebase/database@^7.5.1":
+  version "7.5.1"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/database/-/database-7.5.1.tgz#b94123bfa2cbbe3fd670c4d4bb93695b17248c0a"
+  integrity sha512-k/x1S1oVhBEPmBPtubl8/G/9kM/VRN3vYsGDkg5F9bS0U1Hw7BkfDWMM5O/8q3v4qa23cWj/nKsDfg+5pjt+AA==
+
 "@react-native-firebase/firestore@^7.6.1":
   version "7.6.1"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/firestore/-/firestore-7.6.1.tgz#825b88ac9b33ffe0c7e2561dd95607df535bd308"
@@ -4272,6 +4277,11 @@ react-native-google-places-autocomplete@^1.8.0:
     lodash.debounce "^4.0.8"
     prop-types "^15.5.10"
     qs "~6.9.1"
+
+react-native-image-picker@^2.3.3:
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/react-native-image-picker/-/react-native-image-picker-2.3.3.tgz#eaacd4a1ed9e9887613be31f0765478ca2f18a51"
+  integrity sha512-i/7JDnxKkUGSbFY2i7YqFNn3ncJm1YlcrPKXrXmJ/YUElz8tHkuwknuqBd9QCJivMfHX41cmq4XvdBDwIOtO+A==
 
 react-native-iphone-x-helper@^1.0.3, react-native-iphone-x-helper@^1.2.1:
   version "1.2.1"

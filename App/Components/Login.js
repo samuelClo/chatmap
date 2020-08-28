@@ -21,7 +21,7 @@ export default (props) => {
     return (
         <View style={formStyle.container}>
             <View style={formStyle.inputContainer}>
-                <TextInput style={formStyle.inputs}
+                <TextInput style={formStyle.inputs} 
                            placeholder="Email"
                            keyboardType="email-address"
                            underlineColorAndroid='transparent'

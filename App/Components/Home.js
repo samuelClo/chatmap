@@ -30,12 +30,12 @@ const styles = StyleSheet.create({
 const getGpsFromMaps = async (reference) => {
     return await axios.get(`https://maps.googleapis.com/maps/api/place/details/json?reference=${reference}&sensor=true&key=AIzaSyCeYlJR5yOfwfNoIAEAxkGYqKoX_c4wLc8`)
 }
-const createNewChat = (position) => {
+const createNewMarker = (position) => {
     return firestore()
-        .collection('Chats')
+        .collection('Markers')
         .add(position)
         .then(() => {
-            console.log('New chat is created');
+            console.log('New marker is created');
         });
 }
 
@@ -49,7 +49,7 @@ export default (props) => {
 
     useEffect(() => {
         const subscriber = firestore()
-            .collection('Chats')
+            .collection('Markers')
             .onSnapshot(snapshot => {
                 const changes = snapshot.docChanges();
 
@@ -65,7 +65,7 @@ export default (props) => {
 
         // Stop listening for updates when no longer required
         return () => subscriber();
-    },);
+    });
 
     useEffect(() => {
         Geolocation.getCurrentPosition(info => {
@@ -84,15 +84,10 @@ export default (props) => {
                 .then(data => {
                     const pos = data.data.result.geometry.location
 
-                    return createNewChat(pos)
+                    return createNewMarker(pos)
                 })
         }
-    },);
-
-    const truc = (data) => {
-        console.log(data)
-    }
-
+    });
 
     return (
         <View style={styles.container}>
@@ -111,81 +106,10 @@ export default (props) => {
                     <Marker
                         key={marker.lat + marker.lng}
                         coordinate={{latitude: marker.lat, longitude: marker.lng}}
-                        title={'test titre'}
-                        description={'test description'}
-                        onPress={truc.bind(this, marker.id)}
-                    >
-                        {/*<Callout>*/}
-                        {/*    {test(marker.lat)}*/}
-                        {/*</Callout>*/}
-                    </Marker>
+                        onPress={navigation.navigate.bind(this, 'Messages', {idChat: marker.id})}
+                    />
                 ))}
             </MapView>
         </View>
     )
 };
-
-// const sqd = {
-//     "_firestore": {
-//         "_app": {
-//             "_automaticDataCollectionEnabled": true,
-//             "_deleteApp": [Function bound deleteApp],
-//             "_deleted": false,
-//             "_initialized": true,
-//             "_name": "[DEFAULT]",
-//             "_nativeInitialized": true,
-//             "_options": [Object]
-//         },
-//         "_config": {
-//             "ModuleClass": [Function FirebaseFirestoreModule],
-//             "hasCustomUrlOrRegionSupport": false,
-//             "hasMultiAppSupport": true,
-//             "namespace": "firestore",
-//             "nativeEvents": [Array],
-//             "nativeModuleName": [Array],
-//             "statics": [Object],
-//             "version": "7.6.1"
-//         },
-//         "_customUrlOrRegion": undefined,
-//         "_nativeModule": {
-//             "RNFBFirestoreCollectionModule": true,
-//             "RNFBFirestoreDocumentModule": true,
-//             "RNFBFirestoreModule": true,
-//             "RNFBFirestoreTransactionModule": true,
-//             "clearPersistence": [Function anonymous],
-//             "collectionGet": [Function anonymous],
-//             "collectionOffSnapshot": [Function anonymous],
-//             "collectionOnSnapshot": [Function anonymous],
-//             "disableNetwork": [Function anonymous],
-//             "documentBatch": [Function anonymous],
-//             "documentDelete": [Function anonymous],
-//             "documentGet": [Function anonymous],
-//             "documentOffSnapshot": [Function anonymous],
-//             "documentOnSnapshot": [Function anonymous],
-//             "documentSet": [Function anonymous],
-//             "documentUpdate": [Function anonymous],
-//             "enableNetwork": [Function anonymous],
-//             "getConstants": [Function anonymous],
-//             "setLogLevel": [Function anonymous],
-//             "settings": [Function anonymous],
-//             "terminate": [Function anonymous],
-//             "transactionApplyBuffer": [Function anonymous],
-//             "transactionBegin": [Function anonymous],
-//             "transactionDispose": [Function anonymous],
-//             "transactionGetDocument": [Function anonymous]
-//         },
-//         "_referencePath": {"_parts": [Array]},
-//         "_transactionHandler": {"_firestore": [Circular], "_pending": [Object]}
-//     },
-//     "_isMetadataChange": false,
-//     "_nativeData": {
-//         "doc": {
-//             "data": [Object],
-//             "exists": true,
-//             "metadata": [Array],
-//             "path": "Chats/FnwVcYtPQn6mrlZvmH8l"
-//         }, "isMetadataChange": false, "ni": 0, "oi": -1, "type": "a"
-//     }
-// }
-
-

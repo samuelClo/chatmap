@@ -9,6 +9,8 @@ import Home from "./Components/Home"
 import Register from "./Components/Register"
 import Login from "./Components/Login"
 import SearchPlace from "./Components/SearchPlace"
+import Messages from './Components/Messages'
+import Test from './Components/Test'
 
 export default () => {
     // Set an initializing state whilst Firebase connects
@@ -42,6 +44,7 @@ export default () => {
                     <Stack.Navigator initialRouteName="Home">
                         <Stack.Screen name="Home" component={Home} initialParams={{ dataLocalization: {} }}/>
                         <Stack.Screen name="SearchPlace" component={SearchPlace}/>
+                        <Stack.Screen name="Messages" component={Messages}/>
                     </Stack.Navigator>)
                 : (
                     <Stack.Navigator initialRouteName="Register">
