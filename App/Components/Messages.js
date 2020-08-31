@@ -4,12 +4,11 @@ import {View, StyleSheet, ScrollView} from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 
 import storage from '@react-native-firebase/storage';
+import firestore from "@react-native-firebase/firestore"
+import auth from '@react-native-firebase/auth';
 
 import MessageBubble from './MessageBubble'
 import InputBar from './InputBar'
-import firestore from "@react-native-firebase/firestore"
-import auth from '@react-native-firebase/auth';
-import Geolocation from "@react-native-community/geolocation"
 
 
 const styles = StyleSheet.create({
@@ -19,7 +18,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         backgroundColor: 'white'
     },
-
     messages: {
         flex: 1
     },
@@ -34,7 +32,6 @@ const options = {
         path: 'images',
     },
 };
-
 
 export default (props) => {
     const {route} = props
@@ -61,9 +58,6 @@ export default (props) => {
 
                 const test = changes.map(change => {
                     const  { userId: uid, ...data} = change.doc.data()
-
-                    console.log(uid, userId)
-                    console.log(data)
                     const direction = uid === userId ? 'right' : 'left'
 
                     return {
@@ -94,12 +88,11 @@ export default (props) => {
                 date: new Date(),
             })
             .then(() => {
+                onChangeInputBarText('')
                 console.log('New message is created');
             });
     }
 
-    // if (scrollView.current)
-    //     scrollView.scrollToEnd()
     const sendPicture = () => {
         ImagePicker.showImagePicker(options, (response) => {
             if (response.didCancel) {
@@ -121,7 +114,11 @@ export default (props) => {
 
     return (
         <View style={styles.outer}>
-            <ScrollView ref={scrollView} style={styles.messages}>
+            <ScrollView
+                ref={ref => {this.scrollView = ref}}
+                onContentSizeChange={() => this.scrollView.scrollToEnd({animated: true})}
+                style={styles.messages}
+            >
                 {messages.map((message, i) => (
                     <MessageBubble
                         key={i}
@@ -134,7 +131,8 @@ export default (props) => {
             <InputBar
                 onClipClick={sendPicture}
                 onSendClick={sendMessage}
-                text={inputBarText}
+                content={inputBarText}
+                onChange={onChangeInputBarText}
             />
         </View>
     )

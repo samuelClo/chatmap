@@ -3,10 +3,11 @@ import {formStyleheet, TextInput, View, Text, Button, Image, TouchableHighlight}
 
 import auth from '@react-native-firebase/auth';
 
-import formStyle from '../assets/style/formStyle'
-
+import FacebookLogin from './FacebookLogin'
 import RegistrationInput from "./RegistrationInput"
+
 import globalStyle from "../assets/style/globalStyle"
+import formStyle from '../assets/style/formStyle'
 
 export default (props) => {
     const {navigation} = props;
@@ -74,6 +75,7 @@ export default (props) => {
                     {' Register'}
                 </Text>
             </Text>
+            <FacebookLogin />
         </View>
     );
 };

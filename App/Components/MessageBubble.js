@@ -1,5 +1,6 @@
-import {Text, View, StyleSheet, Image, TouchableHighlight} from "react-native"
 import React from "react"
+import {Text, View, StyleSheet, Image} from "react-native"
+
 import storage from "@react-native-firebase/storage"
 
 const styles = StyleSheet.create({

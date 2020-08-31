@@ -5,7 +5,7 @@ import MapView, {PROVIDER_GOOGLE, Marker, Callout} from 'react-native-maps';
 
 import firestore from '@react-native-firebase/firestore';
 
-import Geolocation from '@react-native-community/geolocation';
+// import Geolocation from '@react-native-community/geolocation';
 
 import axios from 'axios'
 
@@ -30,27 +30,47 @@ const styles = StyleSheet.create({
 const getGpsFromMaps = async (reference) => {
     return await axios.get(`https://maps.googleapis.com/maps/api/place/details/json?reference=${reference}&sensor=true&key=AIzaSyCeYlJR5yOfwfNoIAEAxkGYqKoX_c4wLc8`)
 }
-const createNewMarker = (position) => {
-    return firestore()
-        .collection('Markers')
-        .add(position)
-        .then(() => {
-            console.log('New marker is created');
-        });
-}
 
 export default (props) => {
     const {navigation, route} = props
     const {dataLocalization} = route.params
-    const [modalDisplayed, onChangeModalDisplayed] = React.useState(false);
-    const [currentPosition, onChangeCurrentPosition] = React.useState({});
+    // const [currentPosition, onChangeCurrentPosition] = React.useState({});
     const [allMarkers, onChangeAllMarkers] = React.useState([])
-    const [lastPos, onChangeLastPos] = React.useState({})
+
+    const createNewMarker = (position) => {
+        const {lat, lng} = position
+
+        const duplicateMarker = allMarkers.find(marker => (
+            marker.lat === lat && marker.lng === lng
+        ))
+
+        // if (duplicateMarker) {
+        //     if (navigation.state.routeName === 'Messages')
+        //         return
+        //
+        //     navigation.navigate('Messages', {
+        //         idChat: duplicateMarker.id,
+        //         formattedName: duplicateMarker.formattedName
+        //     })
+        //
+        //     return
+        // }
+
+        return firestore()
+            .collection('Markers')
+            .add(position)
+            .then(() => {
+                console.log('New marker is created');
+            });
+    }
 
     useEffect(() => {
         const subscriber = firestore()
             .collection('Markers')
             .onSnapshot(snapshot => {
+                if (!snapshot)
+                    return
+
                 const changes = snapshot.docChanges();
 
                 onChangeAllMarkers(changes.map(change => {
@@ -67,35 +87,36 @@ export default (props) => {
         return () => subscriber();
     });
 
-    useEffect(() => {
-        Geolocation.getCurrentPosition(info => {
-            onChangeCurrentPosition(info)
-        }, error => console.log(error));
-    }, []);
+    // useEffect(() => {
+    //     Geolocation.getCurrentPosition(info => {
+    //         onChangeCurrentPosition(info)
+    //     }, error => console.log(error));
+    // }, []);
 
     useEffect(() => {
         if (Object.keys(dataLocalization).length > 0) {
-            onChangeLastPos(dataLocalization.reference)
-
-            if (lastPos === dataLocalization.reference)
-                return
-
             getGpsFromMaps(dataLocalization.reference)
                 .then(data => {
-                    const pos = data.data.result.geometry.location
+                    if (!data)
+                        return
 
-                    return createNewMarker(pos)
+                    const dataPos = {
+                        ...data.data.result.geometry.location,
+                        formattedName: data.data.result.formatted_address
+                    }
+
+                    createNewMarker(dataPos)
                 })
         }
-    });
+    }, [dataLocalization.reference]);
 
     return (
         <View style={styles.container}>
             <AddButton onClick={() => navigation.navigate('SearchPlace')}/>
             <MapView
                 initialRegion={{
-                    latitude: currentPosition?.latitude || 48.85661400000001,
-                    longitude: currentPosition?.longitude || 2.3522219,
+                    latitude: 48.85661400000001,
+                    longitude: 2.3522219,
                     latitudeDelta: 0.0922,
                     longitudeDelta: 0.0421,
                 }}
@@ -106,7 +127,10 @@ export default (props) => {
                     <Marker
                         key={marker.lat + marker.lng}
                         coordinate={{latitude: marker.lat, longitude: marker.lng}}
-                        onPress={navigation.navigate.bind(this, 'Messages', {idChat: marker.id})}
+                        onPress={navigation.navigate.bind(this, 'Messages', {
+                            idChat: marker.id,
+                            formattedName: marker.formattedName
+                        })}
                     />
                 ))}
             </MapView>

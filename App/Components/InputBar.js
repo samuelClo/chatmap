@@ -30,12 +30,7 @@ const styles = StyleSheet.create({
 })
 
 export default (props) => {
-    const {content, onSendClick, onClipClick} = props;
-    const [inputText, onChangeInputText] = React.useState('')
-
-    useEffect(() => {
-        onChangeInputText(content)
-    }, []);
+    const {content, onSendClick, onClipClick, onChange} = props;
 
     return (
         <View style={styles.inputBar}>
@@ -43,8 +38,8 @@ export default (props) => {
                 style={styles.textBox}
                 multiline={true}
                 defaultHeight={30}
-                onChangeText={(text) => onChangeInputText(text)}
-                value={inputText}
+                onChangeText={(text) => onChange(text)}
+                value={content}
                 placeholder="Message"
                 placeholderTextColor="#eeefef"
             />
@@ -54,7 +49,7 @@ export default (props) => {
                     source={require('./../assets/picture/clip.png')}
                 />
             </TouchableHighlight>
-            <TouchableHighlight style={styles.sendButton} onPress={onSendClick.bind(this, inputText, null)}>
+            <TouchableHighlight style={styles.sendButton} onPress={onSendClick.bind(this, content, null)}>
                 <Image
                     style={styles.logoInputBar}
                     source={require('./../assets/picture/send.png')}

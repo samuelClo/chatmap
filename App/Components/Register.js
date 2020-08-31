@@ -1,12 +1,12 @@
-import React, {Component} from 'react';
-import {StyleSheet, TextInput, View, Text, Button, Image, TouchableHighlight} from 'react-native';
+import React from 'react';
+import {View, Text, TouchableHighlight} from 'react-native';
 
 import auth from '@react-native-firebase/auth';
 
 import formStyle from '../assets/style/formStyle'
+import globalStyle from "../assets/style/globalStyle"
 
 import RegistrationInput from './RegistrationInput'
-import globalStyle from "../assets/style/globalStyle"
 
 
 export default (props) => {
@@ -59,11 +59,15 @@ export default (props) => {
                 value={password}
                 error={error.password}
             />
-            <TouchableHighlight style={[formStyle.buttonContainer, formStyle.loginButton]}
-                                onPress={register.bind(this, email, password)}>
-                <Text style={formStyle.loginText}>Sign up</Text>
+            <TouchableHighlight
+                style={[formStyle.buttonContainer, formStyle.loginButton]}
+                onPress={register.bind(this, email, password)}
+            >
+                <Text style={formStyle.loginText}>
+                    Sign up
+                </Text>
             </TouchableHighlight>
-            <Text style={{ ...globalStyle.error, ...formStyle.error }}>
+            <Text style={{...globalStyle.error, ...formStyle.error}}>
                 {error.global}
             </Text>
             <Text>

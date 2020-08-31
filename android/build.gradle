@@ -11,6 +11,7 @@ buildscript {
         androidMapsUtilsVersion = "2.0.3"
     }
     repositories {
+        mavenLocal()
         google()
         jcenter()
     }
@@ -24,7 +25,7 @@ buildscript {
 
 allprojects {
     repositories {
-        mavenLocal()
+        mavenCentral()
         maven {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
             url("$rootDir/../node_modules/react-native/android")

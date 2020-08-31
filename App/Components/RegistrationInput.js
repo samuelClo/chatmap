@@ -42,17 +42,18 @@ export default (props) => {
     return (
         <View style={styles.wrapper}>
             <View style={styles.inputContainer}>
-                <TextInput style={styles.inputs}
-                           placeholder={placeholder}
-                           keyboardType={keyboardType}
-                           underlineColorAndroid='transparent'
-                           onChangeText={onChangeText}
-                           autoFocus={isAutoFocus}
-                           value={value}
-                           secureTextEntry={secureTextEntry}
+                <TextInput
+                    style={styles.inputs}
+                    placeholder={placeholder}
+                    keyboardType={keyboardType}
+                    underlineColorAndroid='transparent'
+                    onChangeText={onChangeText}
+                    autoFocus={isAutoFocus}
+                    value={value}
+                    secureTextEntry={secureTextEntry}
                 />
             </View>
-            <Text style={{ ...globalStyle.error,...styles.error }}>
+            <Text style={{...globalStyle.error, ...styles.error}}>
                 {error}
             </Text>
         </View>
