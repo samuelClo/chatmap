@@ -1,6 +1,6 @@
 import React from "react"
 import {StyleSheet, View, Text, Pressable, Image, TextInput} from "react-native";
-import formStyle from './formStyle'
+import formStyle from '../assets/style/formStyle'
 import {GooglePlacesAutocomplete} from "react-native-google-places-autocomplete"
 
 navigator.geolocation = require('@react-native-community/geolocation');

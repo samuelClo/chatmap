@@ -8,23 +8,6 @@ export default StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#DCDCDC',
     },
-    inputContainer: {
-        borderBottomColor: '#F5FCFF',
-        backgroundColor: '#FFFFFF',
-        borderRadius: 30,
-        borderBottomWidth: 1,
-        width: 250,
-        height: 45,
-        marginBottom: 20,
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
-    inputs: {
-        height: 200,
-        marginLeft: 16,
-        borderBottomColor: '#FFFFFF',
-        flex: 1,
-    },
     buttonContainer: {
         height: 45,
         flexDirection: 'row',
@@ -39,5 +22,8 @@ export default StyleSheet.create({
     },
     loginText: {
         color: 'white',
+    },
+    error: {
+        width: 250,
     }
 });
