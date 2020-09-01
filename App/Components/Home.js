@@ -1,15 +1,13 @@
 import React, {useEffect} from "react"
 import {StyleSheet, View} from "react-native";
 
-import MapView, {PROVIDER_GOOGLE, Marker, Callout} from 'react-native-maps';
+import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 
 import firestore from '@react-native-firebase/firestore';
 
-// import Geolocation from '@react-native-community/geolocation';
-
 import axios from 'axios'
 
-import AddButton from './AddButton'
+import ButtonMaps from "./ButtonMaps"
 
 
 const styles = StyleSheet.create({
@@ -27,42 +25,64 @@ const styles = StyleSheet.create({
     }
 });
 
-const getGpsFromMaps = async (reference) => {
-    return await axios.get(`https://maps.googleapis.com/maps/api/place/details/json?reference=${reference}&sensor=true&key=AIzaSyCeYlJR5yOfwfNoIAEAxkGYqKoX_c4wLc8`)
-}
+const getReverseGeocoding = async (lat, lng) => (
+    await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyCeYlJR5yOfwfNoIAEAxkGYqKoX_c4wLc8`)
+)
 
 export default (props) => {
     const {navigation, route} = props
     const {dataLocalization} = route.params
-    // const [currentPosition, onChangeCurrentPosition] = React.useState({});
     const [allMarkers, onChangeAllMarkers] = React.useState([])
+    const [hasModification, onChangeHasModification] = React.useState(false)
+    const [landmark, onChangeLandmark] = React.useState({})
+    const [region, onChangeRegion] = React.useState({
+            latitude: 48.85661400000001,
+            longitude: 2.3522219,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+        })
 
-    const createNewMarker = (position) => {
-        const {lat, lng} = position
+    const createNewMarker = () => {
+        if (!landmark)
+            return
 
-        const duplicateMarker = allMarkers.find(marker => (
+        const {lat, lng} = landmark
+        const isDuplicateMarker = allMarkers.some(marker => (
             marker.lat === lat && marker.lng === lng
         ))
 
-        // if (duplicateMarker) {
-        //     if (navigation.state.routeName === 'Messages')
-        //         return
-        //
-        //     navigation.navigate('Messages', {
-        //         idChat: duplicateMarker.id,
-        //         formattedName: duplicateMarker.formattedName
-        //     })
-        //
-        //     return
-        // }
+        if (isDuplicateMarker)
+            return
 
-        return firestore()
-            .collection('Markers')
-            .add(position)
-            .then(() => {
-                console.log('New marker is created');
-            });
+        return getReverseGeocoding(lat, lng)
+            .then(data => {
+                if (!data)
+                    return
+
+                const dataPos = {
+                    lat,
+                    lng,
+                    formattedName: data.data.results[0].formatted_address,
+                }
+
+                return firestore()
+                    .collection('Markers')
+                    .add(dataPos)
+                    .then(() => {
+                        onChangeHasModification(!hasModification)
+                        console.log('New marker is created');
+                    });
+            })
     }
+
+  const goTo = (lat, lng) => {
+      onChangeRegion({
+              ...region,
+              latitude: lat,
+              longitude: lng
+          }
+      )
+  }
 
     useEffect(() => {
         const subscriber = firestore()
@@ -71,9 +91,7 @@ export default (props) => {
                 if (!snapshot)
                     return
 
-                const changes = snapshot.docChanges();
-
-                onChangeAllMarkers(changes.map(change => {
+                onChangeAllMarkers(snapshot.docChanges().map(change => {
                     const id = change.doc.id
 
                     return {
@@ -85,54 +103,74 @@ export default (props) => {
 
         // Stop listening for updates when no longer required
         return () => subscriber();
-    });
-
-    // useEffect(() => {
-    //     Geolocation.getCurrentPosition(info => {
-    //         onChangeCurrentPosition(info)
-    //     }, error => console.log(error));
-    // }, []);
+    }, [hasModification]); // I have not found a cleaner way:/
 
     useEffect(() => {
-        if (Object.keys(dataLocalization).length > 0) {
-            getGpsFromMaps(dataLocalization.reference)
-                .then(data => {
-                    if (!data)
-                        return
+        if (!(Object.keys(dataLocalization).length > 0))
+            return
 
-                    const dataPos = {
-                        ...data.data.result.geometry.location,
-                        formattedName: data.data.result.formatted_address
-                    }
+        const locationOfSearchPlace = dataLocalization.geometry.location
+        const {lat, lng} = locationOfSearchPlace
 
-                    createNewMarker(dataPos)
-                })
-        }
-    }, [dataLocalization.reference]);
+        getReverseGeocoding(lat, lng)
+            .then(data => {
+                if (!data)
+                    return
+
+                const duplicateMarker = allMarkers.find(marker => (
+                    marker.formattedName === data.data.results[0].formatted_address
+                ))
+
+                if (duplicateMarker) {
+                    navigation.navigate('Messages', {
+                        idChat: duplicateMarker.id,
+                        formattedName: duplicateMarker.formattedName
+                    })
+
+                    return
+                }
+                onChangeLandmark({lat, lng})
+                goTo(lat, lng)
+            })
+    }, [dataLocalization.geometry]);
+
+    const handleMapClick = (e) => {
+        onChangeLandmark({
+            lat: e.nativeEvent.coordinate.latitude,
+            lng: e.nativeEvent.coordinate.longitude,
+        })
+    }
 
     return (
         <View style={styles.container}>
-            <AddButton onClick={() => navigation.navigate('SearchPlace')}/>
+            <ButtonMaps onAddClick={createNewMarker} onSearchClick={() => navigation.navigate('SearchPlace')}/>
             <MapView
-                initialRegion={{
-                    latitude: 48.85661400000001,
-                    longitude: 2.3522219,
-                    latitudeDelta: 0.0922,
-                    longitudeDelta: 0.0421,
-                }}
                 provider={PROVIDER_GOOGLE}
                 style={styles.map}
+                onPress={handleMapClick}
+                onRegionChangeComplete={local => {
+                    console.log(local)
+                    onChangeRegion(local)
+                }}
+                region={region}
             >
                 {allMarkers.map(marker => (
                     <Marker
                         key={marker.lat + marker.lng}
                         coordinate={{latitude: marker.lat, longitude: marker.lng}}
+                        pinColor={'#009bff'}
                         onPress={navigation.navigate.bind(this, 'Messages', {
                             idChat: marker.id,
                             formattedName: marker.formattedName
                         })}
                     />
                 ))}
+                {
+                    Object.keys(landmark).length > 0 && <Marker
+                        key={landmark.lat + landmark.lng}
+                        coordinate={{latitude: landmark.lat, longitude: landmark.lng}}
+                    />
+                }
             </MapView>
         </View>
     )
